@@ -11,6 +11,10 @@ class CameraController:
         self.height = 8
         self.yaw = 0
         self.pitch = 20
+        self.min_pitch = -89   # look almost straight down
+        self.max_pitch = 89    # look almost straight up
+
+
         self.sensitivity = 0.2
 
         # Zoom limits
@@ -71,7 +75,7 @@ class CameraController:
             # Update angles
             self.yaw   -= dx * self.sensitivity
             self.pitch += dy * self.sensitivity
-            self.pitch = max(-10, min(60, self.pitch))
+            self.pitch = max(self.min_pitch, min(self.max_pitch, self.pitch))
             print(self.sensitivity)
 
             # Recenter mouse

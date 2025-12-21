@@ -39,7 +39,7 @@ class Game(ShowBase):
         self.setup_camera()
         self.setup_lighting()
 
-        self.world = World(self.render)
+        self.world = World(self.render,self.loader)
         self.player = Player(self, self.render, self.loader)
         self.input = InputHandler(self)
         self.camera_controller = CameraController(self.camera, self.player,self)
