@@ -33,3 +33,10 @@ def get_model_path(filename: str) -> Filename:
     if not os.path.isfile(full_path):
         raise FileNotFoundError(f"Model not found: {full_path}")
     return Filename.fromOsSpecific(full_path)
+
+def get_objects_by_class(obj, cls):
+    return [
+        value
+        for value in vars(obj).values()
+        if isinstance(value, cls)
+    ]

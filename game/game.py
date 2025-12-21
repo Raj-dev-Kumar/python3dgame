@@ -1,5 +1,5 @@
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import DirectionalLight, AmbientLight
+from panda3d.core import DirectionalLight, AmbientLight, CollisionNode, CollisionSphere,CollisionHandlerPusher,CollisionRay
 from panda3d.core import ClockObject
 
 globalClock = ClockObject.getGlobalClock() # glock used by the pandas used for deltatime beetwen frame
@@ -10,6 +10,7 @@ from input import InputHandler
 from camera import CameraController
 from menu import GameMenu
 from inventory import Inventory
+import system
 
 
 class Game(ShowBase):
@@ -45,7 +46,7 @@ class Game(ShowBase):
         self.camera_controller = CameraController(self.camera, self.player,self)
 
         self.game_paused = False
-
+   
 
         # Menu
         self.menu = GameMenu(self)
@@ -57,6 +58,8 @@ class Game(ShowBase):
         self.accept("escape", self.toggle_menu)
 
         self.taskMgr.add(self.update, "update")
+
+       # print(system.get_objects_by_class(self,Player))
 
     def setup_camera(self):
         self.camera.setPos(0, -20, 10)

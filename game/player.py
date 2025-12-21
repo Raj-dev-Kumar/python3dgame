@@ -8,7 +8,6 @@ class Player:
         self.node.reparentTo(render)
         self.node.setScale(1)
         self.node.setPos(0, 0, 0)
-
         self.inventory = Inventory(base) # each Player should have a player
 
         self.speed = 5
