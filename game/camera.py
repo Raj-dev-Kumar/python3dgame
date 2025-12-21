@@ -32,6 +32,9 @@ class CameraController:
     def zoom_in(self):
         self.distance = max(self.min_distance, self.distance - self.zoom_step)
 
+    def SetSensivity(self, sensitivity):
+        self.sensitivity = sensitivity       
+
     def zoom_out(self):
         self.distance = min(self.max_distance, self.distance + self.zoom_step)
 
@@ -69,6 +72,7 @@ class CameraController:
             self.yaw   -= dx * self.sensitivity
             self.pitch += dy * self.sensitivity
             self.pitch = max(-10, min(60, self.pitch))
+            print(self.sensitivity)
 
             # Recenter mouse
             self.base.win.movePointer(0, center_x, center_y)

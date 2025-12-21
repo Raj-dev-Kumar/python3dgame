@@ -1,4 +1,4 @@
-from direct.gui.DirectGui import DirectFrame, DirectButton
+from direct.gui.DirectGui import DirectFrame, DirectButton, DirectScrollBar, DGG,  DirectSlider
 from panda3d.core import TransparencyAttrib
 import system
 
@@ -15,6 +15,7 @@ class GameMenu:
         self.frame.setTransparency(TransparencyAttrib.MAlpha)
         self.frame.setTexture(self.bg_tex)
         self.frame.hide()  # Hidden by default
+        self.sens_has_changed = False
 
         self.resume_btn = DirectButton(text="Resume",
                                        scale=0.08,
@@ -22,9 +23,17 @@ class GameMenu:
                                        command=self.hide)
         self.resume_btn.reparentTo(self.frame)
 
+        self.sensitivityBar =  DirectSlider(range=(0, 1),
+                                            value=0.2,
+                                            pageSize=0.1,
+                                            command=self.sensitivityChange
+                                            )
+        self.sensitivityBar.setPos(0, 0, -0.1)
+        self.sensitivityBar.reparentTo(self.frame)
+
         self.quit_btn = DirectButton(text="Quit",
                                      scale=0.08,
-                                     pos=(0, 0, -0.2),
+                                     pos=(0, 0, -0.4),
                                      command=self.quit_game)
         self.quit_btn.reparentTo(self.frame)
 
@@ -38,3 +47,6 @@ class GameMenu:
 
     def quit_game(self):
         self.base.userExit()
+    
+    def sensitivityChange(self):
+        self.sens_has_changed = True

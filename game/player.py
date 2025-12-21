@@ -1,9 +1,13 @@
+from inventory import Inventory
+
 class Player:
-    def __init__(self, render, loader):
+    def __init__(self, base, render, loader):
         self.node = loader.loadModel("models/box")
         self.node.reparentTo(render)
         self.node.setScale(1)
         self.node.setPos(0, 0, 1)
+
+        self.inventory = Inventory(base) # each Player should have a player
 
         self.speed = 5
 

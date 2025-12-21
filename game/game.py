@@ -2,7 +2,7 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import DirectionalLight, AmbientLight
 from panda3d.core import ClockObject
 
-globalClock = ClockObject.getGlobalClock()
+globalClock = ClockObject.getGlobalClock() # glock used by the pandas used for deltatime beetwen frame
 
 from world import World
 from player import Player
@@ -15,16 +15,32 @@ from inventory import Inventory
 class Game(ShowBase):
     def __init__(self):
         super().__init__()
+        """
+        super().__init__(), starts the ShowBase class which is responsible for window rendering
+                            starts the render and creates the task manager(taskMgr)
+                            Handles input
+                            Initializes Cameras
+
+        Render - Everything that is displayed by 3D world need to be atached to the scene Graph
+                 which is handled by the render.
+                 This is what adds the player to the world.
+                 creates the world, etc
+
+        task manager(taskMgr) - executes tasks every frame, 
+                                updates object position,
+                                animations and game logic         
+        
+        """
+        
 
 
-
-        self.disableMouse()
+        self.disableMouse() # to use costume Mouse
 
         self.setup_camera()
         self.setup_lighting()
 
         self.world = World(self.render)
-        self.player = Player(self.render, self.loader)
+        self.player = Player(self, self.render, self.loader)
         self.input = InputHandler(self)
         self.camera_controller = CameraController(self.camera, self.player,self)
 
@@ -33,11 +49,11 @@ class Game(ShowBase):
 
         # Menu
         self.menu = GameMenu(self)
-        self.inventory = Inventory(self)
+        #self.inventory = Inventory(self)
 
-        self.inventory.add_item("Sword")
-        self.inventory.add_item("Shield")
-                
+        self.player.inventory.add_item("Sword")
+        self.player.inventory.add_item("Shield")
+
         self.accept("escape", self.toggle_menu)
 
         self.taskMgr.add(self.update, "update")
@@ -62,10 +78,20 @@ class Game(ShowBase):
             self.menu.show()
         else:
             self.menu.hide()
+            
+
+    def update_sensitivity(self):
+        # Get current slider value
+        new_sensitivity = self.menu.sensitivityBar['value']  
+        self.camera_controller.SetSensivity(new_sensitivity)         
 
     def update(self, task):
         if not self.game_paused:    
             dt = globalClock.getDt()
             self.player.update(dt, self.input.keys)
+        else:
+            if self.menu.sens_has_changed:
+                 self.update_sensitivity()  
+                 self.menu.sens_has_changed = False 
         #self.camera_controller.update()
         return task.cont
