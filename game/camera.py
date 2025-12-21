@@ -76,7 +76,6 @@ class CameraController:
             self.yaw   -= dx * self.sensitivity
             self.pitch += dy * self.sensitivity
             self.pitch = max(self.min_pitch, min(self.max_pitch, self.pitch))
-            print(self.sensitivity)
 
             # Recenter mouse
             self.base.win.movePointer(0, center_x, center_y)
@@ -92,5 +91,6 @@ class CameraController:
         player_pos = self.player.node.getPos()
         self.camera.setPos(player_pos + Vec3(x, y, z))
         self.camera.lookAt(player_pos)
+        print(f"x {x} y {y} z {z}")
 
         return task.cont

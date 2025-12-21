@@ -88,7 +88,7 @@ class Game(ShowBase):
     def update(self, task):
         if not self.game_paused:    
             dt = globalClock.getDt()
-            self.player.update(dt, self.input.keys)
+            self.player.update(dt, self.input.keys,self.camera_controller.yaw)
         else:
             if self.menu.sens_has_changed:
                  self.update_sensitivity()  

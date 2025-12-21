@@ -1,3 +1,5 @@
+import math
+
 from inventory import Inventory
 import system
 class Player:
@@ -11,14 +13,32 @@ class Player:
 
         self.speed = 5
 
-    def update(self, dt, keys):
-        move = self.speed * dt
+    def isOutMap(self):
+        if self.node.getX() > 50 or self.node.getX() < -50 or self.node.getY() > 50 or self.node.getX() < -50:  
+            return True
+        return False  
 
-        if keys["w"]:
-            self.node.setY(self.node, move)
+    def update(self, dt, keys, yaw):
+        move = self.speed * dt
+        rad_yaw = math.radians(yaw)
+        cam_forward_x = math.sin(rad_yaw)
+        cam_forward_y = -math.cos(rad_yaw)
+        cam_right_x = math.cos(rad_yaw)
+        cam_right_y = math.sin(rad_yaw)
+
+
         if keys["s"]:
-            self.node.setY(self.node, -move)
+            self.node.setX(self.node, cam_forward_x * move)
+            self.node.setY(self.node, cam_forward_y * move)
+        if keys["w"]:
+            self.node.setX(self.node, -cam_forward_x * move)
+            self.node.setY(self.node, -cam_forward_y * move)
         if keys["a"]:
-            self.node.setX(self.node, -move)
+            self.node.setX(self.node, -cam_right_x * move)
+            self.node.setY(self.node, -cam_right_y * move)
         if keys["d"]:
-            self.node.setX(self.node, move)
+            self.node.setX(self.node, cam_right_x * move)
+            self.node.setY(self.node, cam_right_y * move)
+
+        if self.isOutMap():
+            print("Saiu do mapa")    
