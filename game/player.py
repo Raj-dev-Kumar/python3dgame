@@ -1,8 +1,8 @@
 from inventory import Inventory
-
+import system
 class Player:
     def __init__(self, base, render, loader):
-        self.node = loader.loadModel("models/box")
+        self.node = loader.loadModel(system.get_model_path("cube_transparent_artistic_reference.glb"))
         self.node.reparentTo(render)
         self.node.setScale(1)
         self.node.setPos(0, 0, 0)
