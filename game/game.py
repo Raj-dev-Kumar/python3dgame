@@ -9,6 +9,7 @@ from player import Player
 from input import InputHandler
 from camera import CameraController
 from menu import GameMenu
+from inventory import Inventory
 
 
 class Game(ShowBase):
@@ -32,6 +33,11 @@ class Game(ShowBase):
 
         # Menu
         self.menu = GameMenu(self)
+        self.inventory = Inventory(self)
+
+        self.inventory.add_item("Sword")
+        self.inventory.add_item("Shield")
+                
         self.accept("escape", self.toggle_menu)
 
         self.taskMgr.add(self.update, "update")

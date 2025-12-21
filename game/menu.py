@@ -1,12 +1,19 @@
 from direct.gui.DirectGui import DirectFrame, DirectButton
 from panda3d.core import TransparencyAttrib
+import system
 
 class GameMenu:
     def __init__(self, base):
         self.base = base
-        self.frame = DirectFrame(frameColor=(0, 0, 0, 0.7),
-                                 frameSize=(-1, 1, -1, 1))
+        self.bg_tex = self.base.loader.loadTexture(system.get_asset_path("menu.jpeg"))
+        self.frame = DirectFrame(
+                                    frameColor=(1, 1, 1, 1),
+                                    frameSize=(-1, 1, -1, 1),
+                                    image_scale=(2, 1, 2),
+                                    
+                                 )
         self.frame.setTransparency(TransparencyAttrib.MAlpha)
+        self.frame.setTexture(self.bg_tex)
         self.frame.hide()  # Hidden by default
 
         self.resume_btn = DirectButton(text="Resume",
