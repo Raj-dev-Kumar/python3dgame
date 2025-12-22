@@ -1,6 +1,7 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import DirectionalLight, AmbientLight, CollisionNode, CollisionSphere,CollisionHandlerPusher,CollisionRay
-from panda3d.core import ClockObject
+from panda3d.core import ClockObject,TransparencyAttrib
+from direct.gui.DirectGui import DirectFrame,DirectButton
 
 globalClock = ClockObject.getGlobalClock() # glock used by the pandas used for deltatime beetwen frame
 
@@ -55,6 +56,9 @@ class Game(ShowBase):
         self.player.inventory.add_item("Sword")
         self.player.inventory.add_item("Shield")
 
+        self.ShowCoordenates()
+
+
         self.accept("escape", self.toggle_menu)
 
         self.taskMgr.add(self.update, "update")
@@ -92,9 +96,47 @@ class Game(ShowBase):
         if not self.game_paused:    
             dt = globalClock.getDt()
             self.player.update(dt, self.input.keys,self.camera_controller.yaw)
+            self.ChangeCoordenates()
         else:
             if self.menu.sens_has_changed:
                  self.update_sensitivity()  
                  self.menu.sens_has_changed = False 
         #self.camera_controller.update()
         return task.cont
+
+
+    def ShowCoordenates(self):
+        self.positioncur = DirectFrame(
+                                    frameColor=(1, 1, 1, 0.5),
+                                    frameSize=(-0.4, 0.4, -0.2, 0.2),
+                                    image_scale=(2, 1, 2),
+                                    pos=(-0.9, 0, 0.9), 
+                                    
+                                 )
+        
+        self.positioncur.setTransparency(TransparencyAttrib.MAlpha)
+        self.positioncur.show()  # Hidden by default        
+        self.xcordinate = DirectButton(text=f"x:{self.player.node.getX()}",
+                                       scale=0.05,
+                                       pos=(-0.1, 0, 0.05),
+                                       frameColor=(0, 0, 0, 0),
+                                       )
+        self.xcordinate.reparentTo(self.positioncur)
+        self.ycordinate = DirectButton(text=f"y:{self.player.node.getY()}",
+                                       scale=0.05,
+                                       pos=(-0.1, 0, -0.03),
+                                       frameColor=(0, 0, 0, 0),
+                                       )
+        self.ycordinate.reparentTo(self.positioncur)   
+
+        self.zcordinate = DirectButton(text=f"z:{self.player.node.getZ()}",
+                                       scale=0.05,
+                                       pos=(-0.1, 0, -0.12),
+                                       frameColor=(0, 0, 0, 0),
+                                       )
+        self.zcordinate.reparentTo(self.positioncur)   
+
+    def ChangeCoordenates(self):
+        self.xcordinate["text"] = f"x:{self.player.node.getX()}"            
+        self.ycordinate["text"] = f"y:{self.player.node.getY()}"     
+        self.zcordinate["text"] = f"z:{self.player.node.getZ()}"                  
