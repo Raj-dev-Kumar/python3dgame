@@ -1,53 +1,60 @@
 from panda3d.core import BitMask32, CardMaker, CollisionNode, CollisionSphere, TextureStage, Texture
+from panda3d.core import GeoMipTerrain
 import system
 class begining:
-    def __init__( self, render,loader):
-        ground = CardMaker("ground")
-        ground.setFrame(-50, 50, -50, 50)
-        
+    def __init__( self, render,loader,tree_tuple):
 
-        node = render.attachNewNode(ground.generate())
-        node.setP(-90)
-        node.setZ(0)
+    
+        self.MAP_SIZE = 256
+        self.HEIGHT_SCALE = 10
+
+       
+        self.terrain = GeoMipTerrain("terrain")
+        self.terrain.setHeightfield("../assets/heightmap.png")
+
+        self.terrain.setBlockSize(32)
+        self.terrain.setNear(50)
+        self.terrain.setFar(200)
+        self.terrain.setFocalPoint(render)
+
+        self.terrain_root = self.terrain.getRoot()
+        self.terrain_root.reparentTo(render)
+
+        # Scale defines size
+        self.terrain_root.setScale(
+            1,                      # X size
+            1,                      # Y size
+            self.HEIGHT_SCALE       # Z height
+        )
+
+        # Center terrain at (0, 0, 0)
+        self.terrain_root.setPos(
+            -self.MAP_SIZE / 2,
+            -self.MAP_SIZE / 2,
+            0
+        )
+
+        self.terrain.generate()
+
+        grass = loader.loadTexture(system.get_texture_path("grass_baseColor.jpeg"))
+        grass.setMinfilter(Texture.FTLinearMipmapLinear)
+        grass.setMagfilter(Texture.FTLinear)
+        grass.setAnisotropicDegree(8)
+
+        ts = TextureStage("grass")
+        self.terrain_root.setTexture(ts, grass)
+        self.terrain_root.setTexScale(ts, 256, 256)
 
 
-        ground_tex = loader.loadTexture(system.get_texture_path("grass_baseColor.jpeg"))
-        ground_tex.setMinfilter(Texture.FTLinearMipmapLinear)
-        ground_tex.setMagfilter(Texture.FTLinear)
-        ground_tex.setAnisotropicDegree(8)
-        # Apply texture
-        ts_grass = TextureStage("grass")
-        node.setTexture(ts_grass, ground_tex)
-        node.setTexScale(ts_grass, 20, 20)
-
-
-
-                # DIRT PATCH
-        dirt = CardMaker("dirt")
-        dirt.setFrame(-50, 10, -10,-40)
-        dirt_np = render.attachNewNode(dirt.generate())
-        dirt_np.setP(-90)
-        dirt_np.setZ(0)  # Slightly higher to avoid z-fighting
-
-        dirt_tex = loader.loadTexture(system.get_texture_path("grass_metallicRoughness.png"))
-        dirt_tex.setMinfilter(Texture.FTLinearMipmapLinear)
-        dirt_tex.setMagfilter(Texture.FTLinear)
-        dirt_tex.setAnisotropicDegree(8)        
-        ts_dirt = TextureStage("dirt")
-        dirt_np.setTexture(ts_dirt, dirt_tex)
-        dirt_np.setTexScale(ts_dirt, 4, 4)
-
-
-
-
-        self.tree_model = loader.loadModel(system.get_model_path("maple_tree.glb"))
-        self.TreeCollisionNode = CollisionNode("colNode")
-        self.TreeCollisionNode.addSolid(CollisionSphere(0,0,0,1.5))
-        self.TreeCollisionpath = self.tree_model.attachNewNode(self.TreeCollisionNode)
-        self.TreeCollisionpath.show()        
-        self.TreeCollisionNode.setIntoCollideMask(BitMask32.bit(1))
-        self.tree_model.reparentTo(render)
-        self.tree_model.setPos(10, 10, 0)
-        self.tree_model.setScale(0.01)
-        self.tree_model.setH(45)  # Rotate tree for variation
-       # self.tree_model.attachNewNode(CollisionNode('colNode'))
+        for i in tree_tuple:
+            self.tree_model = loader.loadModel(system.get_model_path("maple_tree.glb"))
+            self.TreeCollisionNode = CollisionNode("colNode")
+            self.TreeCollisionNode.addSolid(CollisionSphere(0,0,0,1.5))
+            self.TreeCollisionpath = self.tree_model.attachNewNode(self.TreeCollisionNode)
+            self.TreeCollisionpath.show()        
+            self.TreeCollisionNode.setIntoCollideMask(BitMask32.bit(1))
+            self.tree_model.reparentTo(render)
+            self.tree_model.setPos(i[0], i[1], i[2])
+            self.tree_model.setScale(0.01)
+            self.tree_model.setH(45)  # Rotate tree for variation
+        # self.tree_model.attachNewNode(CollisionNode('colNode'))

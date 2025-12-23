@@ -9,7 +9,7 @@ class Player:
         self.node = loader.loadModel(system.get_model_path("cube_transparent_artistic_reference.glb"))
         self.node.reparentTo(render)
         self.node.setScale(1)
-        self.node.setPos(0, 0, const.MIN_Z_POSITION)
+        self.node.setPos(96, 0, const.MIN_Z_POSITION)
         self.inventory = Inventory(base) # each Player should have a player
         self.time_jump = 0
         self.time = 0
@@ -65,7 +65,7 @@ class Player:
         if( keys[const.JUMP_KEY] and
             self.node.getZ() == const.MIN_Z_POSITION and
             self.time_jump<self.time):
-            
+
             self.time_jump = self.time + const.JUMP_TIME
             self.isJumpingTime =  self.time + const.JUMP_TIME
 
