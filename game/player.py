@@ -1,6 +1,7 @@
 import math
 from inventory import Inventory
 import system
+from bullet import Bullet
 from panda3d.core import ClockObject
 import const
 
@@ -14,6 +15,10 @@ class Player:
         self.time_jump = 0
         self.time = 0
         self.isJumpingTime = 0
+        self.base = base
+        self.render = render
+        self.loader = loader    
+        self.bullet =[]    
 
         self.speed = 5
 
@@ -31,13 +36,21 @@ class Player:
         cam_right_x = math.cos(rad_yaw)
         cam_right_y = math.sin(rad_yaw)
 
+        for i in self.bullet:
+            if i is not None:
+                i.update(frametime)
+                if not i.remove:
+                    i.moveBullet(dt)
+                else:
+                    del i    
+
         if self.node.getZ() >const.MIN_Z_POSITION:
             self.node.setZ(self.node.getZ()-const.FALL_SPEED*dt)
 
         if self.node.getZ() <const.MIN_Z_POSITION:
             self.node.setZ(const.MIN_Z_POSITION)  
 
-        print(f" time_jump {self.time_jump} time {self.time}")   
+      #  print(f" time_jump {self.time_jump} time {self.time}")   
 
 
         if  self.isJumpingTime>self.time:
@@ -47,7 +60,7 @@ class Player:
         if keys[const.MOVE_BACKWARDS_KEY]:
             self.node.setX(self.node, cam_forward_x * move)
             self.node.setY(self.node, cam_forward_y * move)
-
+  
 
         if keys[const.MOVE_FORWARD_KEY]:
             self.node.setX(self.node, -cam_forward_x * move)
@@ -69,6 +82,12 @@ class Player:
             self.time_jump = self.time + const.JUMP_TIME
             self.isJumpingTime =  self.time + const.JUMP_TIME
 
+        if keys[const.MOUSE_LEFT]:
+            self.bullet.append( Bullet(self.base, self.render,self.loader,self.time,
+                                 (self.node.getX(),self.node.getY(),self.node.getZ()),
+                                 cam_forward_x,cam_forward_y)
+                              )  
 
         if self.isOutMap():
-            print("Saiu do mapa")    
+           # print("Saiu do mapa")  
+           pass  

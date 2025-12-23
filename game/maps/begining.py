@@ -10,7 +10,7 @@ class begining:
 
        
         self.terrain = GeoMipTerrain("terrain")
-        self.terrain.setHeightfield(system.get_texture_path("../heightmap.png"))
+        self.terrain.setHeightfield(system.get_asset_path("heightmap.png"))
 
         self.terrain.setBlockSize(32)
         self.terrain.setNear(50)

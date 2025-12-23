@@ -27,3 +27,4 @@ MOVE_BACKWARDS_KEY = ("s")
 MOVE_LEFT_KEY = ("a")
 MOVE_RIGHT_KEY = ("d")
 JUMP_KEY ="space"
+MOUSE_LEFT="c"

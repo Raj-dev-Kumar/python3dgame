@@ -7,7 +7,8 @@ class InputHandler:
                     const.MOVE_LEFT_KEY: False,
                     const.MOVE_BACKWARDS_KEY: False,
                     const.MOVE_RIGHT_KEY: False,
-                    const.JUMP_KEY:False
+                    const.JUMP_KEY:False,
+                    const.MOUSE_LEFT:False
                     }
 
         for key in self.keys:
