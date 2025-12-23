@@ -91,6 +91,6 @@ class CameraController:
         player_pos = self.player.node.getPos()
         self.camera.setPos(player_pos + Vec3(x, y, z))
         self.camera.lookAt(player_pos)
-        print(f"x {x} y {y} z {z}")
+        
 
         return task.cont

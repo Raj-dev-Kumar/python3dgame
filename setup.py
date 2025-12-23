@@ -12,9 +12,12 @@ setup(
             "gui_apps": {
                 "python3dgame": "game/main.py",  # exe name : entry script
             },
-        "console_apps": {
-            "python3dgame_console": "game/main.py",  # Console version
-        },
+            "icons":
+               {
+                    # The key needs to match the key used in gui_apps/console_apps.
+                    # Alternatively, use "*" to set the icon for all apps.
+                    "python3dgame": ["icon.ico","icon.png","icon.png","icon.png","icon.png"],
+                },
             # Include assets like textures, models, and other folders
             "include_patterns": [
                 "assets/**/*",
