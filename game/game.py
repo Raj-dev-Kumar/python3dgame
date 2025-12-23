@@ -1,6 +1,6 @@
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import DirectionalLight, AmbientLight, CollisionNode, CollisionSphere,CollisionHandlerPusher,CollisionRay
-from panda3d.core import ClockObject,TransparencyAttrib
+from panda3d.core import DirectionalLight, AmbientLight, CollisionNode, CollisionSphere,CollisionHandlerQueue,CollisionRay,CollisionTraverser
+from panda3d.core import ClockObject,TransparencyAttrib, BitMask32
 from direct.gui.DirectGui import DirectFrame,DirectButton
 
 globalClock = ClockObject.getGlobalClock() # glock used by the pandas used for deltatime beetwen frame
@@ -41,13 +41,24 @@ class Game(ShowBase):
         self.setup_camera()
         self.setup_lighting()
 
-        self.world = World(self.render,self.loader)
+        self.world = World(self.render,self.loader,"begining")
         self.player = Player(self, self.render, self.loader)
         self.input = InputHandler(self)
         self.camera_controller = CameraController(self.camera, self.player,self)
 
         self.game_paused = False
-   
+
+        #Collision
+        self.playerCollisionNode = CollisionNode("PlayerCollision")
+        self.playerCollisionNode.addSolid(CollisionSphere(0,0,0,1.5))
+        self.playerCollisionNode.setFromCollideMask(BitMask32.bit(1))
+        self.playerCollisionpath = self.player.node.attachNewNode(self.playerCollisionNode)
+        self.playerCollisionpath.show()
+
+        self.traverser = CollisionTraverser()
+        self.handler = CollisionHandlerQueue()
+
+        self.traverser.addCollider(self.playerCollisionpath,self.handler)
 
         # Menu
         self.menu = GameMenu(self)
@@ -62,8 +73,17 @@ class Game(ShowBase):
         self.accept("escape", self.toggle_menu)
 
         self.taskMgr.add(self.update, "update")
+        self.taskMgr.add(self.updateCol, "colisoes")
 
        # print(system.get_objects_by_class(self,Player))
+
+
+
+    def updateCol(self,task):
+        self.traverser.traverse(self.render)
+        return task.cont
+
+
 
     def setup_camera(self):
         self.camera.setPos(0, -20, 10)
@@ -95,8 +115,11 @@ class Game(ShowBase):
     def update(self, task):
         if not self.game_paused:    
             dt = globalClock.getDt()
-            self.player.update(dt, self.input.keys,self.camera_controller.yaw)
+            self.player.update(dt, self.input.keys,self.camera_controller.yaw,globalClock.getFrameTime())
             self.ChangeCoordenates()
+            if self.handler.getNumEntries() >0:
+                for entry in self.handler.getEntries():
+                    print(f"colidiu com {entry.getIntoNodePath().getName()}")
         else:
             if self.menu.sens_has_changed:
                  self.update_sensitivity()  

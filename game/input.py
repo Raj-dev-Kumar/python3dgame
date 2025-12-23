@@ -1,6 +1,14 @@
+import const
+
 class InputHandler:
     def __init__(self, base):
-        self.keys = {"w": False, "a": False, "s": False, "d": False}
+        self.keys = {
+                    const.MOVE_FORWARD_KEY: False,
+                    const.MOVE_LEFT_KEY: False,
+                    const.MOVE_BACKWARDS_KEY: False,
+                    const.MOVE_RIGHT_KEY: False,
+                    const.JUMP_KEY:False
+                    }
 
         for key in self.keys:
             base.accept(key, self.set_key, [key, True])

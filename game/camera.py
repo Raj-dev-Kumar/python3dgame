@@ -11,8 +11,8 @@ class CameraController:
         self.height = 8
         self.yaw = 0
         self.pitch = 20
-        self.min_pitch = -89   # look almost straight down
-        self.max_pitch = 89    # look almost straight up
+        self.min_pitch = -35   # look almost straight down
+        self.max_pitch = 45    # look almost straight up
 
 
         self.sensitivity = 0.2

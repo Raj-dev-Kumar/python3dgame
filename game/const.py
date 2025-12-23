@@ -3,8 +3,27 @@ ASSETS_DIR_NAME = ("assets")
 MODELS_DIR_NAME = ("models")
 
 
+
+
 STATE_FROZEN = ("frozen")
 
 
 GLB_EXTENSION = (".glb")
 BAM_EXTENSION = (".bam")
+
+MAP_CLASS_POS = 1
+
+
+#JUMP
+MIN_Z_POSITION = 1
+FALL_SPEED = 1
+JUMP_TIME = 1
+JUMP_SPEED = 1.3
+
+#Key Binding
+
+MOVE_FORWARD_KEY = ("w")
+MOVE_BACKWARDS_KEY = ("s")
+MOVE_LEFT_KEY = ("a")
+MOVE_RIGHT_KEY = ("d")
+JUMP_KEY ="space"
